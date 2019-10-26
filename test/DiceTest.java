@@ -10,7 +10,7 @@ public class DiceTest {
     public void simpleRoll() {
         Dice dice = new Dice(0);
         for (int i = 0; i < 1000000; i++) {
-            assertEquals(3.5,dice.roll(),2.5);
+            assertEquals(3.5, dice.roll(), 2.5);
         }
 
     }
@@ -47,7 +47,5 @@ public class DiceTest {
         System.out.println("4 : " + rolls[3]);
         System.out.println("5 : " + rolls[4]);
         System.out.println("6 : " + rolls[5]);
-
-
     }
 }
