@@ -3,6 +3,7 @@ import felter.FeltBase;
 import felter.PalaceGates;
 import felter.Tower;
 import felter.Crater;
+import felter.WalledCity;
 
 import java.util.Scanner;
 
@@ -22,6 +23,7 @@ public class Game {
         braet.addFelt(new Tower());
         braet.addFelt(new ColdDesert());
         braet.addFelt(new Crater());
+        braet.addFelt(new WalledCity());
 
         String name1, name2;
         int win_score = 3000;
