@@ -6,7 +6,7 @@ import felter.Tower;
 import java.util.Scanner;
 
 public class Game {
-    public void startSpil(){
+    public void startSpil() {
         int terning1Min = 1;
         int terning1Max = 6;
         Terning terning1 = new Terning(terning1Min, terning1Max);
@@ -26,9 +26,9 @@ public class Game {
 
         Scanner in = new Scanner(System.in);
         System.out.print("Indtast navn på spiller 1: ");
-        name1=in.nextLine();
+        name1 = in.nextLine();
         System.out.print("indtast navn på spiller 2: ");
-        name2=in.nextLine();
+        name2 = in.nextLine();
         System.out.println("player1: " + name1 + ", " + "player2: " + name2);
 
         Spiller spiller1 = new Spiller(name1);
@@ -40,6 +40,8 @@ public class Game {
         boolean spilErSlut = false;
 
         while (!spilErSlut) {
+            Spiller spillerHoejsteScore = null;
+
             for (Spiller spiller : spillere) {
                 System.out.println();
 
@@ -70,16 +72,22 @@ public class Game {
 
                 System.out.println(spiller.getNavn() + " ny score: " + spillerKonto.getBalance());
 
-                if (spillerKonto.getBalance() >= win_score) {
-                    spilErSlut = true;
-
-                    System.out.println(spiller.getNavn() + " har vundet med " + spillerKonto.getBalance() + " points!");
-
-                    break;
+                if (spillerHoejsteScore == null) {
+                    spillerHoejsteScore = spiller;
+                } else {
+                    if (spillerKonto.getBalance() > spillerHoejsteScore.getKonto().getBalance()) {
+                        spillerHoejsteScore = spiller;
+                    }
                 }
 
                 System.out.print("Tryk ENTER for næste runde...");
                 in.nextLine();
+            }
+
+            if (spillerHoejsteScore.getKonto().getBalance() >= win_score) {
+                spilErSlut = true;
+
+                System.out.println(spillerHoejsteScore.getNavn() + " har vundet med " + spillerHoejsteScore.getKonto().getBalance() + " points!");
             }
         }
     }
