@@ -15,6 +15,17 @@ import felter.HutsInTheMountain;
 import java.util.Scanner;
 
 public class Game {
+    private Scanner in;
+
+    public Game(){
+        this.in = new Scanner(System.in);
+    }
+
+    private void pauseNaesteRunde(){
+        System.out.print("Tryk ENTER for næste runde...");
+        in.nextLine();
+    }
+
     public void startSpil() {
         int terning1Min = 1;
         int terning1Max = 6;
@@ -41,11 +52,13 @@ public class Game {
         String name1, name2;
         int win_score = 3000;
 
-        Scanner in = new Scanner(System.in);
         System.out.print("Indtast navn på spiller 1: ");
-        name1 = in.nextLine();
+        name1 = this.in.nextLine();
         System.out.print("indtast navn på spiller 2: ");
-        name2 = in.nextLine();
+        name2 = this.in.nextLine();
+
+        System.out.println();
+
         System.out.println("player1: " + name1 + ", " + "player2: " + name2);
 
         Spiller spiller1 = new Spiller(name1);
@@ -53,6 +66,9 @@ public class Game {
 
         Spiller[] spillere = {spiller1, spiller2};
 
+        System.out.println();
+
+        this.pauseNaesteRunde();
 
         boolean spilErSlut = false;
 
@@ -97,12 +113,13 @@ public class Game {
                     }
                 }
 
-                System.out.print("Tryk ENTER for næste runde...");
-                in.nextLine();
+               this.pauseNaesteRunde();
             }
 
             if (spillerHoejsteScore.getKonto().getBalance() >= win_score) {
                 spilErSlut = true;
+
+                System.out.println();
 
                 System.out.println(spillerHoejsteScore.getNavn() + " har vundet med " + spillerHoejsteScore.getKonto().getBalance() + " points!");
             }
