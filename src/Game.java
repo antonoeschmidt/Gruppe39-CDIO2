@@ -5,6 +5,12 @@ import felter.Tower;
 import felter.Monastery;
 import felter.WalledCity;
 import felter.Crater;
+import felter.TheWereWall;
+import felter.ThePit;
+import felter.BlackCave;
+import felter.Goldmine;
+import felter.HutsInTheMountain;
+
 
 import java.util.Scanner;
 
@@ -26,6 +32,11 @@ public class Game {
         braet.addFelt(new Monastery());
         braet.addFelt(new WalledCity());
         braet.addFelt(new Crater());
+        braet.addFelt(new ThePit());
+        braet.addFelt(new TheWereWall());
+        braet.addFelt(new HutsInTheMountain());
+        braet.addFelt(new Goldmine());
+        braet.addFelt(new BlackCave());
 
         String name1, name2;
         int win_score = 3000;
