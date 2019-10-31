@@ -6,6 +6,10 @@ public class FeltBase {
     String feltBesked;
     boolean ekstraTur = false;
 
+    public boolean getEkstraTur() {
+        return this.ekstraTur;
+    }
+
     public int getVaerdi() {
         return this.feltVaerdi;
     }

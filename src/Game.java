@@ -21,8 +21,12 @@ public class Game {
         this.in = new Scanner(System.in);
     }
 
-    private void pauseNaesteRunde(){
-        System.out.print("Tryk ENTER for næste runde...");
+    private void pauseNaesteRunde(boolean ekstraTur){
+        if (ekstraTur){
+            System.out.print("Tryk ENTER for at spille ekstratur...");
+        } else {
+            System.out.print("Tryk ENTER for næste runde...");
+        }
         in.nextLine();
     }
 
@@ -68,7 +72,7 @@ public class Game {
 
         System.out.println();
 
-        this.pauseNaesteRunde();
+        this.pauseNaesteRunde(false);
 
         boolean spilErSlut = false;
 
@@ -83,27 +87,7 @@ public class Game {
                 // Vis nuværende score for begge spillere inden der rulles med terningerne
                 System.out.println(spiller.getNavn() + " balance: " + spillerKonto.getBalance());
 
-                int number1 = terning1.roll();
-                int number2 = terning2.roll();
-
-                int sum = number1 + number2;
-                System.out.println("resultat: " + number1 + " + " + number2 + " = " + sum);
-
-                FeltBase felt = braet.getFelt(sum);
-
-                int feltVaerdi = felt.getVaerdi();
-
-                System.out.println(felt.getNavn());
-                System.out.println(felt.getBesked());
-
-                if (feltVaerdi > 0) {
-                    spillerKonto.deposit(feltVaerdi);
-                } else {
-                    // Brug den absolutte værdi (realværdien), så f.eks. -300 eller 300 bliver til 300
-                    spillerKonto.withdraw(Math.abs(feltVaerdi));
-                }
-
-                System.out.println(spiller.getNavn() + " ny score: " + spillerKonto.getBalance());
+                this.spilRunde(braet, terning1, terning2, spillerKonto);
 
                 if (spillerHoejsteScore == null) {
                     spillerHoejsteScore = spiller;
@@ -113,7 +97,7 @@ public class Game {
                     }
                 }
 
-               this.pauseNaesteRunde();
+
             }
 
             if (spillerHoejsteScore.getKonto().getBalance() >= win_score) {
@@ -123,6 +107,38 @@ public class Game {
 
                 System.out.println(spillerHoejsteScore.getNavn() + " har vundet med " + spillerHoejsteScore.getKonto().getBalance() + " points!");
             }
+        }
+    }
+    private void spilRunde(SpilleBraet braet, Terning terning1, Terning terning2, Konto spillerKonto) {
+        int number1 = terning1.roll();
+        int number2 = terning2.roll();
+
+        int sum = number1 + number2;
+        System.out.println("resultat: " + number1 + " + " + number2 + " = " + sum);
+
+        FeltBase felt = braet.getFelt(sum);
+
+        int feltVaerdi = felt.getVaerdi();
+
+        System.out.println(felt.getNavn());
+        System.out.println(felt.getBesked());
+
+        if (feltVaerdi > 0) {
+            spillerKonto.deposit(feltVaerdi);
+        } else {
+            // Brug den absolutte værdi (realværdien), så f.eks. -300 eller 300 bliver til 300
+            spillerKonto.withdraw(Math.abs(feltVaerdi));
+        }
+
+        System.out.println("Ny score: " + spillerKonto.getBalance());
+
+        // Pause med forskellig besked alt efter om det er en ekstra tur
+        boolean rundeErEkstraTur = felt.getEkstraTur();
+        this.pauseNaesteRunde(rundeErEkstraTur);
+
+        if (felt.getEkstraTur()) {
+            System.out.println();
+            this.spilRunde(braet, terning1, terning2, spillerKonto);
         }
     }
 
