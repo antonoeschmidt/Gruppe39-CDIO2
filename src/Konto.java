@@ -3,6 +3,9 @@ public class Konto {
 
     public void withdraw(int amount) {
         balance -= amount;
+        if (balance < 0) {
+            balance = 0;
+        }
         //balance = balance - amount;
     }
     public void deposit(int amount) {
