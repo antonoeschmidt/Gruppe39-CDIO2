@@ -18,4 +18,7 @@ public class FeltBase {
         return this.feltBesked;
     }
 
+    public boolean getEkstraTur() {
+        return ekstraTur;
+    }
 }
