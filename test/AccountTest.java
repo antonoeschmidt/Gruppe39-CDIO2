@@ -2,24 +2,24 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class KontoTest {
+public class AccountTest {
 
     @Test
     public void withdrawTest() {
         //Konto starter på 1000
-        Konto konto = new Konto();
-        konto.withdraw(2000);
+        Account account = new Account();
+        account.withdraw(2000);
         //Kontoen får i første omgang værdien -1000, men skal rette dette til 0, da man ikke kan have en negativ konto
-        assertEquals(0,konto.getBalance());
+        assertEquals(0, account.getBalance());
     }
 
     @Test
     public void depositTest() {
         //Konto starter på 1000
-        Konto konto = new Konto();
-        konto.deposit(500);
+        Account account = new Account();
+        account.deposit(500);
         //Kontoen får tilført 500, og skal derefter have 1500 efter deposit
-        assertEquals(1500,konto.getBalance());
+        assertEquals(1500, account.getBalance());
 
     }
 }

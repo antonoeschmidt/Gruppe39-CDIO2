@@ -1,9 +1,9 @@
 package felter;
 
-public class Tower extends FeltBase {
+public class Tower extends FieldBase {
     public Tower() {
-        super.feltVaerdi = 250;
-        super.feltNavn = "Tower";
-        super.feltBesked = "Du fandt en skattekiste i tårnet. Der er 250 mønter i";
+        super.fieldValue = 250;
+        super.fieldName = "Tower";
+        super.fieldMessage = "Du fandt en skattekiste i tårnet. Der er 250 mønter i";
     }
 }

@@ -1,5 +1,5 @@
 import felter.ColdDesert;
-import felter.FeltBase;
+import felter.FieldBase;
 import felter.PalaceGates;
 import felter.Tower;
 import felter.Monastery;
@@ -21,8 +21,8 @@ public class Game {
         this.in = new Scanner(System.in);
     }
 
-    private void pauseNaesteRunde(boolean ekstraTur){
-        if (ekstraTur){
+    private void pauseNextRound(boolean extraTurn){
+        if (extraTurn){
             System.out.print("Tryk ENTER for at spille ekstratur...");
         } else {
             System.out.print("Tryk ENTER for næste runde...");
@@ -30,28 +30,28 @@ public class Game {
         in.nextLine();
     }
 
-    public void startSpil() {
-        int terning1Min = 1;
-        int terning1Max = 6;
-        Terning terning1 = new Terning(terning1Min, terning1Max);
+    public void startGame() {
+        int dice1Min = 1;
+        int dice1Max = 6;
+        Dice dice1 = new Dice(dice1Min, dice1Max);
 
-        int terning2Min = 1;
-        int terning2Max = 6;
-        Terning terning2 = new Terning(terning2Min, terning2Max);
+        int dice2Min = 1;
+        int dice2Max = 6;
+        Dice dice2 = new Dice(dice2Min, dice2Max);
 
-        SpilleBraet braet = new SpilleBraet(terning1, terning2);
+        Board board = new Board(dice1, dice2);
 
-        braet.addFelt(new PalaceGates());
-        braet.addFelt(new Tower());
-        braet.addFelt(new ColdDesert());
-        braet.addFelt(new Monastery());
-        braet.addFelt(new WalledCity());
-        braet.addFelt(new Crater());
-        braet.addFelt(new ThePit());
-        braet.addFelt(new TheWereWall());
-        braet.addFelt(new HutsInTheMountain());
-        braet.addFelt(new Goldmine());
-        braet.addFelt(new BlackCave());
+        board.addFelt(new PalaceGates());
+        board.addFelt(new Tower());
+        board.addFelt(new ColdDesert());
+        board.addFelt(new Monastery());
+        board.addFelt(new WalledCity());
+        board.addFelt(new Crater());
+        board.addFelt(new ThePit());
+        board.addFelt(new TheWereWall());
+        board.addFelt(new HutsInTheMountain());
+        board.addFelt(new Goldmine());
+        board.addFelt(new BlackCave());
 
         String name1, name2;
         int win_score = 3000;
@@ -65,80 +65,80 @@ public class Game {
 
         System.out.println("player1: " + name1 + ", " + "player2: " + name2);
 
-        Spiller spiller1 = new Spiller(name1);
-        Spiller spiller2 = new Spiller(name2);
+        Player player1 = new Player(name1);
+        Player player2 = new Player(name2);
 
-        Spiller[] spillere = {spiller1, spiller2};
+        Player[] players = {player1, player2};
 
         System.out.println();
 
-        this.pauseNaesteRunde(false);
+        this.pauseNextRound(false);
 
-        boolean spilErSlut = false;
+        boolean gameEnded = false;
 
-        while (!spilErSlut) {
-            Spiller spillerHoejsteScore = null;
+        while (!gameEnded) {
+            Player playerTopScore = null;
 
-            for (Spiller spiller : spillere) {
+            for (Player player : players) {
                 System.out.println();
 
-                Konto spillerKonto = spiller.getKonto();
+                Account spillerAccount = player.getAccount();
 
-                // Vis nuværende score for begge spillere inden der rulles med terningerne
-                System.out.println(spiller.getNavn() + " balance: " + spillerKonto.getBalance());
+                // Vis nuværende score for begge players inden der rulles med terningerne
+                System.out.println(player.getNavn() + " balance: " + spillerAccount.getBalance());
 
-                this.spilRunde(braet, terning1, terning2, spillerKonto);
+                this.playRound(board, dice1, dice2, spillerAccount);
 
-                if (spillerHoejsteScore == null) {
-                    spillerHoejsteScore = spiller;
+                if (playerTopScore == null) {
+                    playerTopScore = player;
                 } else {
-                    if (spillerKonto.getBalance() > spillerHoejsteScore.getKonto().getBalance()) {
-                        spillerHoejsteScore = spiller;
+                    if (spillerAccount.getBalance() > playerTopScore.getAccount().getBalance()) {
+                        playerTopScore = player;
                     }
                 }
 
 
             }
 
-            if (spillerHoejsteScore.getKonto().getBalance() >= win_score) {
-                spilErSlut = true;
+            if (playerTopScore.getAccount().getBalance() >= win_score) {
+                gameEnded = true;
 
                 System.out.println();
 
-                System.out.println(spillerHoejsteScore.getNavn() + " har vundet med " + spillerHoejsteScore.getKonto().getBalance() + " points!");
+                System.out.println(playerTopScore.getNavn() + " har vundet med " + playerTopScore.getAccount().getBalance() + " points!");
             }
         }
     }
-    private void spilRunde(SpilleBraet braet, Terning terning1, Terning terning2, Konto spillerKonto) {
-        int number1 = terning1.roll();
-        int number2 = terning2.roll();
+    private void playRound(Board board, Dice dice1, Dice dice2, Account playerAccount) {
+        int number1 = dice1.roll();
+        int number2 = dice2.roll();
 
         int sum = number1 + number2;
         System.out.println("resultat: " + number1 + " + " + number2 + " = " + sum);
 
-        FeltBase felt = braet.getFelt(sum);
+        FieldBase field = board.getFelt(sum);
 
-        int feltVaerdi = felt.getVaerdi();
+        int fieldValue = field.getValue();
 
-        System.out.println(felt.getNavn());
-        System.out.println(felt.getBesked());
+        System.out.println(field.getName());
+        System.out.println(field.getMessage());
 
-        if (feltVaerdi > 0) {
-            spillerKonto.deposit(feltVaerdi);
+        if (fieldValue > 0) {
+            playerAccount.deposit(fieldValue);
         } else {
             // Brug den absolutte værdi (realværdien), så f.eks. -300 eller 300 bliver til 300
-            spillerKonto.withdraw(Math.abs(feltVaerdi));
+            playerAccount.withdraw(Math.abs(fieldValue));
         }
 
-        System.out.println("Ny score: " + spillerKonto.getBalance());
+        System.out.println("Ny score: " + playerAccount.getBalance());
 
         // Pause med forskellig besked alt efter om det er en ekstra tur
-        boolean rundeErEkstraTur = felt.getEkstraTur();
-        this.pauseNaesteRunde(rundeErEkstraTur);
+        boolean rundeErEkstraTur = field.getExtraTurn();
+        this.pauseNextRound(rundeErEkstraTur);
 
-        if (felt.getEkstraTur()) {
+        if (field.getExtraTurn()) {
             System.out.println();
-            this.spilRunde(braet, terning1, terning2, spillerKonto);
+            this.playRound(board, dice1, dice2, playerAccount);
 
         }
     }

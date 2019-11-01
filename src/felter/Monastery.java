@@ -1,9 +1,9 @@
 package felter;
 
-public class Monastery extends FeltBase {
+public class Monastery extends FieldBase {
     public Monastery() {
-        super.feltVaerdi = 0;
-        super.feltNavn = "Monastery";
-        super.feltBesked = " Du finder en guldmønt på gaden men ser en fattig munk så du giver den til ham så du får ingenting";
+        super.fieldValue = 0;
+        super.fieldName = "Monastery";
+        super.fieldMessage = " Du finder en guldmønt på gaden men ser en fattig munk så du giver den til ham så du får ingenting";
     }
 }

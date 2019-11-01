@@ -1,9 +1,9 @@
 package felter;
 
-public class Goldmine extends FeltBase {
+public class Goldmine extends FieldBase {
     public Goldmine() {
-        super.feltVaerdi = 650;
-        super.feltNavn = "Goldmine";
-        super.feltBesked = "Du finder guld i bjergene og sælger det for 650 mønter";
+        super.fieldValue = 650;
+        super.fieldName = "Goldmine";
+        super.fieldMessage = "Du finder guld i bjergene og sælger det for 650 mønter";
     }
 }

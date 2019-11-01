@@ -1,10 +1,10 @@
-public class Spiller {
-    private Konto konto;
+public class Player {
+    private Account account;
     private String name;
 
-    public Spiller(String name) {
+    public Player(String name) {
         this.name = name;
-        this.konto = new Konto();
+        this.account = new Account();
     }
 
     public String getNavn() {
@@ -15,8 +15,8 @@ public class Spiller {
         this.name = name;
     }
 
-    public Konto getKonto() {
-        return this.konto;
+    public Account getAccount() {
+        return this.account;
     }
 
 }

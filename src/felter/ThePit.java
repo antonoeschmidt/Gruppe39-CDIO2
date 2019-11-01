@@ -1,9 +1,9 @@
 package felter;
 
-public class ThePit extends FeltBase {
+public class ThePit extends FieldBase {
     public ThePit() {
-        super.feltVaerdi = -50;
-        super.feltNavn = "The Pit";
-        super.feltBesked = "Du er faldet ned i et hul og taber 50 mønter på vejen op ";
+        super.fieldValue = -50;
+        super.fieldName = "The Pit";
+        super.fieldMessage = "Du er faldet ned i et hul og taber 50 mønter på vejen op ";
     }
 }

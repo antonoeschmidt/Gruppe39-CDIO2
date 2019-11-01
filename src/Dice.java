@@ -1,13 +1,13 @@
-public class Terning {
+public class Dice {
     private int max;
     private int min;
 
-    public Terning(int min, int max) {
+    public Dice(int min, int max) {
         this.min=min;
         this.max=max;
 
     }
-    public Terning(){
+    public Dice(){
         this.min=1;
         this.max=6;
     }

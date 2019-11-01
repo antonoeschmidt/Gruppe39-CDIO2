@@ -1,4 +1,4 @@
-public class Konto {
+public class Account {
     private int balance = 1000;
 
     public void withdraw(int amount) {
