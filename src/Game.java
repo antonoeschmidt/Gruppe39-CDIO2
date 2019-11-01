@@ -1,61 +1,145 @@
+import felter.ColdDesert;
+import felter.FieldBase;
+import felter.PalaceGates;
+import felter.Tower;
+import felter.Monastery;
+import felter.WalledCity;
+import felter.Crater;
+import felter.TheWereWall;
+import felter.ThePit;
+import felter.BlackCave;
+import felter.Goldmine;
+import felter.HutsInTheMountain;
+
+
 import java.util.Scanner;
 
 public class Game {
-    private Player player1;
-    private Player player2;
-    private Dice dice1;
-    private Dice dice2;
-    private boolean vind = false;
+    private Scanner in;
 
-
-    public Game(Player player1, Player player2, Dice dice1, Dice dice2) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.dice1 = dice1;
-        this.dice2 = dice2;
-
+    public Game(){
+        this.in = new Scanner(System.in);
     }
 
-    public void StartGame() {
-        while (vind == false) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Tryk enter for at slå for " + player1.getName());
-            scanner.nextLine();
-            playerTurn(player1);
-            System.out.println("Tryk enter for at slå for " + player2.getName());
-            scanner.nextLine();
-            playerTurn(player2);
-            System.out.println(player1.getName() + " score: " + player1.getScore());
-            System.out.println(player2.getName() + " score: " + player2.getScore());
+    private void pauseNextRound(boolean extraTurn){
+        if (extraTurn){
+            System.out.print("Tryk ENTER for at spille ekstratur...");
+        } else {
+            System.out.print("Tryk ENTER for næste runde...");
         }
-        if (player1.isWinner() ) {
-            System.out.println(player1.getName() + " vinder med " + player1.getScore() + " point.");
-        }
-        else if (player2.isWinner()){
-            System.out.println(player2.getName() + " vinder med " + player2.getScore() + " point.");
-        }
-        }
+        in.nextLine();
+    }
+
+    public void startGame() {
+        int dice1Min = 1;
+        int dice1Max = 6;
+        Dice dice1 = new Dice(dice1Min, dice1Max);
+
+        int dice2Min = 1;
+        int dice2Max = 6;
+        Dice dice2 = new Dice(dice2Min, dice2Max);
+
+        Board board = new Board(dice1, dice2);
+
+        board.addFelt(new PalaceGates());
+        board.addFelt(new Tower());
+        board.addFelt(new ColdDesert());
+        board.addFelt(new Monastery());
+        board.addFelt(new WalledCity());
+        board.addFelt(new Crater());
+        board.addFelt(new ThePit());
+        board.addFelt(new TheWereWall());
+        board.addFelt(new HutsInTheMountain());
+        board.addFelt(new Goldmine());
+        board.addFelt(new BlackCave());
+
+        String name1, name2;
+        int win_score = 3000;
+
+        System.out.print("Indtast navn på spiller 1: ");
+        name1 = this.in.nextLine();
+        System.out.print("indtast navn på spiller 2: ");
+        name2 = this.in.nextLine();
+
+        System.out.println();
+
+        System.out.println("player1: " + name1 + ", " + "player2: " + name2);
+
+        Player player1 = new Player(name1);
+        Player player2 = new Player(name2);
+
+        Player[] players = {player1, player2};
+
+        System.out.println();
+
+        this.pauseNextRound(false);
+
+        boolean gameEnded = false;
+
+        while (!gameEnded) {
+            Player playerTopScore = null;
+
+            for (Player player : players) {
+                System.out.println();
+
+                Account spillerAccount = player.getAccount();
+
+                // Vis nuværende score for begge players inden der rulles med terningerne
+                System.out.println(player.getNavn() + " balance: " + spillerAccount.getBalance());
+
+                this.playRound(board, dice1, dice2, spillerAccount);
+
+                if (playerTopScore == null) {
+                    playerTopScore = player;
+                } else {
+                    if (spillerAccount.getBalance() > playerTopScore.getAccount().getBalance()) {
+                        playerTopScore = player;
+                    }
+                }
 
 
-    private void playerTurn(Player player) {
-        dice1.roll();
-        dice2.roll();
-        player.setScore(player.getScore() + dice1.getFaceValue());
-        System.out.println(player.getName() + " slår med første terning = " + dice1.getFaceValue());
-        player.setScore(player.getScore() + dice2.getFaceValue());
-        System.out.println(player.getName() + " slår med anden terning = " + dice2.getFaceValue());
-        if (dice1.getFaceValue() == 1 && dice2.getFaceValue() == 1) {
-            player.setScore(0);
-            System.out.println("Ærgerligt, score nulstillet.");
-        } else if (dice1.getFaceValue() == dice2.getFaceValue() && player.getScore() < 40) {
-            dice1.roll();
-            dice1.roll();
-            player.setScore(player.getScore() + dice1.getFaceValue() + dice2.getFaceValue());
-            System.out.println("Ekstra slag gav " + dice1.getFaceValue() +" og " + dice2.getFaceValue());
+            }
+
+            if (playerTopScore.getAccount().getBalance() >= win_score) {
+                gameEnded = true;
+
+                System.out.println();
+
+                System.out.println(playerTopScore.getNavn() + " har vundet med " + playerTopScore.getAccount().getBalance() + " points!");
+            }
         }
-        if (player.getScore() >= 40 && dice1.getFaceValue() == dice2.getFaceValue()){
-            vind = true;
-            player.setWinner(true);
+    }
+    private void playRound(Board board, Dice dice1, Dice dice2, Account playerAccount) {
+        int number1 = dice1.roll();
+        int number2 = dice2.roll();
+
+        int sum = number1 + number2;
+        System.out.println("resultat: " + number1 + " + " + number2 + " = " + sum);
+
+        FieldBase field = board.getFelt(sum);
+
+        int fieldValue = field.getValue();
+
+        System.out.println(field.getName());
+        System.out.println(field.getMessage());
+
+        if (fieldValue > 0) {
+            playerAccount.deposit(fieldValue);
+        } else {
+            // Brug den absolutte værdi (realværdien), så f.eks. -300 eller 300 bliver til 300
+            playerAccount.withdraw(Math.abs(fieldValue));
+        }
+
+        System.out.println("Ny score: " + playerAccount.getBalance());
+
+        // Pause med forskellig besked alt efter om det er en ekstra tur
+        boolean rundeErEkstraTur = field.getExtraTurn();
+        this.pauseNextRound(rundeErEkstraTur);
+
+        if (field.getExtraTurn()) {
+            System.out.println();
+            this.playRound(board, dice1, dice2, playerAccount);
+
         }
     }
 

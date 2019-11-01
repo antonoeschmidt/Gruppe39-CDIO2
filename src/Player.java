@@ -1,35 +1,22 @@
 public class Player {
+    private Account account;
     private String name;
-    private int score;
-    private boolean winner;
 
-    public Player(String name, int score, boolean winner) {
+    public Player(String name) {
         this.name = name;
-        this.score = score;
-        this.winner = winner;
+        this.account = new Account();
     }
 
-    public String getName() {
-        return name;
+    public String getNavn() {
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getScore() {
-        return score;
+    public Account getAccount() {
+        return this.account;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public boolean isWinner() {
-        return winner;
-    }
-
-    public void setWinner(boolean winner) {
-        this.winner = winner;
-    }
 }

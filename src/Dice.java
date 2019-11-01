@@ -1,29 +1,26 @@
 public class Dice {
-    private final int MAX = 6;
-    private int faceValue;
+    private int max;
+    private int min;
 
-    public Dice(int faceValue) {
-        this.faceValue = faceValue;
+    public Dice(int min, int max) {
+        this.min=min;
+        this.max=max;
+
+    }
+    public Dice(){
+        this.min=1;
+        this.max=6;
     }
 
     public int roll() {
-        faceValue = (int)(Math.random() * MAX) + 1;
-        return faceValue;
+        return this.min + (int)(Math.random() * ((this.max - this.min) + 1));
     }
 
-    public int getFaceValue() {
-        return faceValue;
+    public int getMin() {
+        return this.min;
     }
 
-    public void setFaceValue(int faceValue) {
-        this.faceValue = faceValue;
-    }
-
-    @Override
-    public String toString() {
-        return "Dice{" +
-                "faceValue=" + faceValue +
-                '}';
+    public int getMax() {
+        return this.max;
     }
 }
-
